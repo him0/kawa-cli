@@ -26,11 +26,20 @@ func New() (*ImageDisplay, error) {
 }
 
 func (d *ImageDisplay) Display(imageData []byte) error {
+	return d.DisplayWithSize(imageData, "")
+}
+
+func (d *ImageDisplay) DisplayWithSize(imageData []byte, width string) error {
 	if !d.useImgcat {
 		return fmt.Errorf("no suitable image display method available")
 	}
 
-	cmd := exec.Command("imgcat")
+	args := []string{}
+	if width != "" && width != "auto" {
+		args = append(args, "-W", width)
+	}
+
+	cmd := exec.Command("imgcat", args...)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		return fmt.Errorf("failed to create stdin pipe: %w", err)

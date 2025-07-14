@@ -43,7 +43,7 @@ func runOnceMode(cfg *config.Config, fetch *fetcher.ImageFetcher, disp *display.
 		log.Fatalf("Failed to fetch image: %v", err)
 	}
 
-	if err := disp.Display(imageData); err != nil {
+	if err := disp.DisplayWithSize(imageData, cfg.Width); err != nil {
 		log.Fatalf("Failed to display image: %v", err)
 	}
 }
@@ -96,7 +96,7 @@ func runLiveMode(cfg *config.Config, fetch *fetcher.ImageFetcher, disp *display.
 
 		case imageData := <-imageChan:
 			disp.MoveCursorHome()
-			if err := disp.Display(imageData); err != nil {
+			if err := disp.DisplayWithSize(imageData, cfg.Width); err != nil {
 				log.Printf("Failed to display image: %v", err)
 			}
 
